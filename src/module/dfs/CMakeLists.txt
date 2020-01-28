@@ -1,0 +1,6 @@
+add_subdirectory (util)
+add_subdirectory (message)
+add_subdirectory (client)
+add_subdirectory (metaserver)
+add_subdirectory (dataserver)
+add_subdirectory (script)
