@@ -22,11 +22,11 @@ sudo make install<br>
 ./build.sh
 
 #### Run
-#####metaserver
+##### metaserver
 * cd build/release/release/<br>
 * ./bin/metaserver -f /opt/neptune/dfs/conf/metaserver.conf -d
 
-#####dataserver
+##### dataserver
 * mkfs.ext4 /dev/sda<br>  
 * mount -t ext4 /dev/sda /data/disk1<br>
 * bash ./script/disk.sh format 1<br>
