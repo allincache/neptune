@@ -2,16 +2,16 @@
 #define NEP_BASE_CONCURRENT_LOCK_H
 
 #include <pthread.h>
+#include "base/include/Base.h"
 #include "base/thread/ThreadException.h"
 
 namespace neptune {
 namespace base {
 
 template <typename T>
-class LockT
+class LockT: noncopyable
 {
  public:
-    
   LockT(const T& mutex) :
     _mutex(mutex)
   {
@@ -83,13 +83,8 @@ class LockT
   }
 
  private:
-  
-  LockT(const LockT&);
-  LockT& operator=(const LockT&);
-
   const T& _mutex;
   mutable bool _acquired;
-
   friend class Cond;
 };
 
@@ -97,7 +92,6 @@ template <typename T>
 class TryLockT : public LockT<T>
 {
  public:
-
   TryLockT(const T& mutex) :
     LockT<T>(mutex, true)
   {}
@@ -113,19 +107,19 @@ enum ELockMode
 class ScopedRWLock;
 class RWLock
 {
-  public:
-    typedef ScopedRWLock Lock;
-    RWLock(ELockMode lockMode = NO_PRIORITY);
-    virtual ~RWLock();
+ public:
+  typedef ScopedRWLock Lock;
+  RWLock(ELockMode lockMode = NO_PRIORITY);
+  virtual ~RWLock();
 
-    int rdlock() ;
-    int wrlock() ;
-    int tryrdlock() ;
-    int trywrlock() ;
-    int unlock() ;
+  int rdlock() ;
+  int wrlock() ;
+  int tryrdlock() ;
+  int trywrlock() ;
+  int unlock() ;
 
-  private:
-    pthread_rwlock_t rwlock_;
+ private:
+  pthread_rwlock_t rwlock_;
 };
 
 enum ELockType
@@ -145,7 +139,7 @@ class ScopedRWLock
       int ret = locker_.rdlock();
       if (0 !=ret)
       {
-        //LOG(WARN , "lock failed, ret: %d", ret);
+        LOG(WARN , "lock failed, ret: %d", ret);
       }
     }
     else
@@ -153,7 +147,7 @@ class ScopedRWLock
       int ret = locker_.wrlock();
       if (0 !=ret)
       {
-        //LOG(WARN , "lock failed, ret: %d", ret);
+        LOG(WARN , "lock failed, ret: %d", ret);
       }
     }
   }
@@ -163,12 +157,12 @@ class ScopedRWLock
     int ret = locker_.unlock();
     if (0 !=ret)
     {
-      //LOG(WARN , "unlock failed, ret: %d", ret);
+      LOG(WARN , "unlock failed, ret: %d", ret);
     }
   }
 
-  private:
-    RWLock& locker_;
+ private:
+  RWLock& locker_;
 };
 
 } //namespace base 

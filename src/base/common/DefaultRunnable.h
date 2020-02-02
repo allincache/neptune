@@ -8,16 +8,11 @@ class CDefaultRunnable : public Runnable {
 
  public:
   CDefaultRunnable(int threadCount = 1);
-  
   virtual ~CDefaultRunnable();
-
-  void setThreadCount(int threadCount);
-  
   int start();
-
   void stop();
-
   void wait();
+  void setThreadCount(int threadCount);
 
  protected:    
   CThread *_thread;

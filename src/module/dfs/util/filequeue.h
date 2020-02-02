@@ -7,7 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "base/log/Log.h"
-#include "base/thread/ThreadMutex.h"
+#include "base/thread/CThreadMutex.h"
 #include "base/fs/FileUtil.h"
 
 namespace neptune {

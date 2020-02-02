@@ -1,0 +1,13 @@
+aux_source_directory(. SRC_LIST) # 搜索当前目录下的所有.cpp文件
+add_library(
+    simple_net_obj OBJECT
+    ${SRC_LIST}
+    $<TARGET_OBJECTS:concurrent_obj>
+    $<TARGET_OBJECTS:container_obj>
+    $<TARGET_OBJECTS:log_obj>
+    $<TARGET_OBJECTS:process_obj>
+    $<TARGET_OBJECTS:string_obj>
+    $<TARGET_OBJECTS:thread_obj>
+    $<TARGET_OBJECTS:threadpool_obj>
+    $<TARGET_OBJECTS:time_obj>
+)

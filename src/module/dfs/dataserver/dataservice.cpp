@@ -206,7 +206,7 @@ int DataService::initialize(int argc, char* argv[])
       if (NULL == dev_name)//get dev name
       {
         iret =  EXIT_CONFIG_ERROR;
-        LOG(ERROR, "%s","dataserver not set dev_name");
+        LOG(ERROR, "%s", "dataserver not set dev_name");
       }
       else
       {

@@ -12,18 +12,13 @@ class Cond;
 class StaticMutex
 {
  public:
-
   typedef LockT<StaticMutex> Lock;
   typedef TryLockT<StaticMutex> TryLock;
 
   void lock() const;
-
   bool tryLock() const;
-
   void unlock() const;
-
   mutable pthread_mutex_t _mutex;
-
   friend class Cond;
 
  private:
@@ -31,12 +26,11 @@ class StaticMutex
   {
     pthread_mutex_t* mutex;
   };
-
   void unlock(LockState&) const;
   void lock(LockState&) const;
 };
 
-#define TNET_STATIC_MUTEX_INITIALIZER { PTHREAD_MUTEX_INITIALIZER }
+#define BASE_STATIC_MUTEX_INITIALIZER { PTHREAD_MUTEX_INITIALIZER }
 
 extern StaticMutex globalMutex;
 

@@ -2,4 +2,4 @@
 
 using namespace neptune::base;
 
-StaticMutex globalMutex = TNET_STATIC_MUTEX_INITIALIZER;
+StaticMutex globalMutex = BASE_STATIC_MUTEX_INITIALIZER;

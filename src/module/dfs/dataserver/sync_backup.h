@@ -4,7 +4,7 @@
 #include "base/common/Internal.h"
 #include "dfs/client/dfs_client_impl.h"
 #include "base/common/Memory.h"
-#include "base/thread/ThreadDetail.h"
+#include "base/thread/Thread.h"
 
 namespace neptune {
 namespace dfs {

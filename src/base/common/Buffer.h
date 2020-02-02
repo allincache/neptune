@@ -39,7 +39,7 @@ class Buffer {
 
   inline int64_t get_data_length() const
   {
-    return  (pfree_ - pdata_);
+    return (pfree_ - pdata_);
   }
 
   inline char* get_free() const
@@ -143,7 +143,7 @@ class Buffer {
     }
   }
 
-private:
+ private:
   inline bool shrink()
   {
     bool bret = NULL != pstart_;

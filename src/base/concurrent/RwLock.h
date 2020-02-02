@@ -21,9 +21,7 @@ class CRLock
   ~CRLock() {}
     
   int lock() const;
-
   int tryLock() const;
-
   int unlock() const;
     
  private:

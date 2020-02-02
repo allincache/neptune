@@ -44,7 +44,7 @@ const char* Exception::what() const throw()
 {
   try
   {
-    StaticMutex::Lock lock(globalMutex);
+    //StaticMutex::Lock lock(globalMutex);
     {
       if(_str.empty())
       {

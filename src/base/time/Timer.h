@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 #include "base/common/Shared.h"
-#include "base/thread/ThreadDetail.h"
+#include "base/thread/Thread.h"
 #include "base/common/Monitor.h"
 #include "Time.h"
 

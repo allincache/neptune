@@ -1,4 +1,3 @@
-
 #ifndef NEPTUNE_BASE_H
 #define NEPTUNE_BASE_H
 
@@ -134,9 +133,9 @@ inline int getSystemErrno()
 #include "base/common/DefaultRunnable.h"
 #include "base/process/Process.h"
 #include "base/log/Log.h"
-#include "base/thread/Thread.h"
-#include "base/thread/ThreadMutex.h"
-#include "base/thread/ThreadCond.h"
+#include "base/thread/CThread.h"
+#include "base/thread/CThreadMutex.h"
+#include "base/thread/CThreadCond.h"
 #include "base/common/QueueThread.h"
 #include "base/common/Exception.h"
 #include "base/common/Serialization.h"

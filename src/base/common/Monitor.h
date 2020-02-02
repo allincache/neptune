@@ -20,26 +20,18 @@ class Monitor
   ~Monitor();
 
   void lock() const;
-    
   void unlock() const;
-    
   bool tryLock() const;
-  
   bool wait() const;
-
   bool timedWait(const Time&) const;
-
   void notify();
-
   void notifyAll();
 
  private:
 
   Monitor(const Monitor&);
   Monitor& operator=(const Monitor&);
-
   void notifyImpl(int) const;
-
   mutable Cond _cond;
   T _mutex;
   mutable int _nnotify;
@@ -47,7 +39,7 @@ class Monitor
 
 template <class T> 
 Monitor<T>::Monitor() :
-    _nnotify(0)
+  _nnotify(0)
 {
 }
 
@@ -62,7 +54,7 @@ Monitor<T>::lock() const
   _mutex.lock();
   if(_mutex.willUnlock())
   {
-      _nnotify = 0;
+    _nnotify = 0;
   }
 }
 
@@ -71,7 +63,7 @@ Monitor<T>::unlock() const
 {
   if(_mutex.willUnlock())
   {
-      notifyImpl(_nnotify);
+    notifyImpl(_nnotify);
   }
   _mutex.unlock();
 }
@@ -82,7 +74,7 @@ Monitor<T>::tryLock() const
   bool result = _mutex.tryLock();
   if(result && _mutex.willUnlock())
   {
-      _nnotify = 0;
+    _nnotify = 0;
   }
   return result;
 }
@@ -98,12 +90,12 @@ Monitor<T>::wait() const
 #else
   try
   {
-      _cond.waitImpl(_mutex);
+    _cond.waitImpl(_mutex);
   }
   catch(...)
   {
-      _nnotify = 0;
-      throw;
+    _nnotify = 0;
+    throw;
   }
 
   _nnotify = 0;
@@ -114,61 +106,60 @@ Monitor<T>::wait() const
 template <class T> inline bool
 Monitor<T>::timedWait(const Time& timeout) const
 {
-    notifyImpl(_nnotify);
+  notifyImpl(_nnotify);
 #ifdef _NO_EXCEPTION
-    const bool rc = _cond.timedWaitImpl(_mutex, timeout);
-    _nnotify = 0;
-    return rc;
+  const bool rc = _cond.timedWaitImpl(_mutex, timeout);
+  _nnotify = 0;
+  return rc;
 #else
-    try
-    {
-        _cond.timedWaitImpl(_mutex, timeout);
-    }
-    catch(...)
-    {
-        _nnotify = 0;
-        throw;
-    }
+  try
+  {
+    _cond.timedWaitImpl(_mutex, timeout);
+  }
+  catch(...)
+  {
     _nnotify = 0;
+    throw;
+  }
+  _nnotify = 0;
 #endif
-    return true;
+  return true;
 }
 
 template <class T> inline void
 Monitor<T>::notify()
 {
-    if(_nnotify != -1)
-    {
-        ++_nnotify;
-    }
+  if(_nnotify != -1)
+  {
+    ++_nnotify;
+  }
 }
 
 template <class T> inline void
 Monitor<T>::notifyAll()
 {
-    _nnotify = -1;
+  _nnotify = -1;
 }
-
 
 template <class T> inline void
 Monitor<T>::notifyImpl(int nnotify) const
 {
-    if(nnotify != 0)
+  if(nnotify != 0)
+  {
+    if(nnotify == -1)
     {
-        if(nnotify == -1)
-        {
-            _cond.broadcast();
-            return;
-        }
-        else
-        {
-            while(nnotify > 0)
-            {
-                _cond.signal();
-                --nnotify;
-            }
-        }
+      _cond.broadcast();
+      return;
     }
+    else
+    {
+      while(nnotify > 0)
+      {
+        _cond.signal();
+        --nnotify;
+      }
+    }
+  }
 }
 
 } //namespace base

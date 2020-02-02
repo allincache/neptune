@@ -19,7 +19,6 @@ CDefaultRunnable::~CDefaultRunnable() {
 void CDefaultRunnable::setThreadCount(int threadCount)
 {
   if (_thread != NULL) {
-    //LOG(ERROR, "�Ѿ��������˲��������߳���");
     return;
   }
   _threadCount = threadCount;

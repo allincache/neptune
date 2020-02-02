@@ -3,62 +3,34 @@
 namespace neptune {
 namespace base {
 
+#define MCHECK(ret) ({ __typeof__ (ret) errnum = (ret);         \
+                       assert(errnum == 0); (void) errnum;})
+
 Mutex::Mutex()
 {
-  const int rt = pthread_mutex_init(&_mutex, NULL);
-#ifdef _NO_EXCEPTION
-  assert( rt == 0 );
-  if ( rt != 0 )
-  {
-  //    LOG(ERROR,"%s","ThreadSyscallException");
-  } 
-#else
-  if ( rt != 0 )
-  {
-    throw ThreadSyscallException(__FILE__, __LINE__, rt);
-  }
-#endif
+  MCHECK(pthread_mutex_init(&_mutex, NULL));
+// #ifdef _NO_EXCEPTION
+//   assert( rt == 0 );
+//   if ( rt != 0 )
+//   {
+//     LOG(ERROR,"%s","ThreadSyscallException");
+//   } 
+// #else
+//   if ( rt != 0 )
+//   {
+//     throw ThreadSyscallException(__FILE__, __LINE__, rt);
+//   }
+// #endif
 }
 
 Mutex::~Mutex()
 {
-  const int rt = pthread_mutex_destroy(&_mutex); 
-  assert(rt == 0);
-  if ( rt != 0 )
-  {
-  //    LOG(ERROR,"%s","ThreadSyscallException");
-  } 
+  MCHECK(pthread_mutex_destroy(&_mutex)); 
 }
 
 void Mutex::lock() const
 {
-  const int rt = pthread_mutex_lock(&_mutex);
-#ifdef _NO_EXCEPTION
-  assert( rt == 0 );
-  if ( rt != 0 )
-  {
-    if ( rt == EDEADLK )
-    {
-    //    LOG(ERROR,"%s","ThreadLockedException "); 
-    }
-    else
-    {
-    //    LOG(ERROR,"%s","ThreadSyscallException"); 
-    }
-  }
-#else
-  if( rt != 0 )
-  {
-    if(rt == EDEADLK)
-    {
-      throw ThreadLockedException(__FILE__, __LINE__);
-    }
-    else
-    {
-      throw ThreadSyscallException(__FILE__, __LINE__, rt);
-    }
-  }
-#endif
+  MCHECK(pthread_mutex_lock(&_mutex));
 }
 
 bool Mutex::tryLock() const
@@ -69,11 +41,11 @@ bool Mutex::tryLock() const
   {
     if ( rt == EDEADLK )
     {
-    //    LOG(ERROR,"%s","ThreadLockedException "); 
+      LOG(ERROR,"%s","ThreadLockedException "); 
     }
     else
     {
-    //    LOG(ERROR,"%s","ThreadSyscallException"); 
+      LOG(ERROR,"%s","ThreadSyscallException"); 
     }
     return false;
   }
@@ -95,19 +67,7 @@ bool Mutex::tryLock() const
 
 void Mutex::unlock() const
 {
-  const int rt = pthread_mutex_unlock(&_mutex);
-#ifdef _NO_EXCEPTION
-  assert( rt == 0 );
-  if ( rt != 0 )
-  {
-  //    LOG(ERROR,"%s","ThreadSyscallException");
-  } 
-#else
-  if ( rt != 0 )
-  {
-    throw ThreadSyscallException(__FILE__, __LINE__, rt);
-  }
-#endif
+  MCHECK(pthread_mutex_unlock(&_mutex));
 }
 
 void Mutex::unlock(LockState& state) const

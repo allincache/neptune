@@ -10,17 +10,16 @@ namespace base {
 
 template<class T> class Monitor;
 class Mutex;
-class RecMutex;
+class CountMutex;
 
 class Cond : private noncopyable
 {
- public:
 
+ public:
   Cond();
   ~Cond();
 
   void signal();
-
   void broadcast();
 
   template <typename Lock> inline bool 
@@ -28,12 +27,12 @@ class Cond : private noncopyable
   {
     if(!lock.acquired())
     {
-#ifdef _NO_EXCEPTION
-      LOG(ERROR,"%s","ThreadLockedException");
-      return false;
-#else
-      throw ThreadLockedException(__FILE__, __LINE__);
-#endif
+      #ifdef _NO_EXCEPTION
+        LOG(ERROR,"%s","ThreadLockedException");
+        return false;
+      #else
+        throw ThreadLockedException(__FILE__, __LINE__);
+      #endif
     }
     return waitImpl(lock._mutex);
   }
@@ -43,57 +42,53 @@ class Cond : private noncopyable
   {
     if(!lock.acquired())
     {
-#ifdef _NO_EXCEPTION
-      LOG(ERROR,"%s","ThreadLockedException");
-      return false;
-#else
-      throw ThreadLockedException(__FILE__, __LINE__);
-#endif
+      #ifdef _NO_EXCEPTION
+        LOG(ERROR,"%s","ThreadLockedException");
+        return false;
+      #else
+        throw ThreadLockedException(__FILE__, __LINE__);
+      #endif
     }
     return timedWaitImpl(lock._mutex, timeout);
   }
 
  private:
-
   friend class Monitor<Mutex>;
-  friend class Monitor<RecMutex>;
-
+  friend class Monitor<CountMutex>;
   template <typename M> bool waitImpl(const M&) const;
   template <typename M> bool timedWaitImpl(const M&, const Time&) const;
-
   mutable pthread_cond_t _cond;
-  };
+};
 
-  template <typename M> inline bool 
-  Cond::waitImpl(const M& mutex) const
-  {
-    typedef typename M::LockState LockState;
+template <typename M> inline bool 
+Cond::waitImpl(const M& mutex) const
+{
+  typedef typename M::LockState LockState;
+  LockState state;
+  mutex.unlock(state);
+  const int rc = pthread_cond_wait(&_cond, state.mutex);
+  mutex.lock(state);
 
-    LockState state;
-    mutex.unlock(state);
-    const int rc = pthread_cond_wait(&_cond, state.mutex);
-    mutex.lock(state);
-
-    #ifdef _NO_EXCEPTION
+  #ifdef _NO_EXCEPTION
     if( 0 != rc )
     {
       LOG(ERROR,"%s","ThreadSyscallException");
       return false;
     } 
-    #else
+  #else
     if(0 != rc)
     {
       throw ThreadSyscallException(__FILE__, __LINE__, rc);
     }
-    #endif
-    return true;
-  }
+  #endif
+  return true;
+}
 
-  template <typename M> inline bool
-  Cond::timedWaitImpl(const M& mutex, const Time& timeout) const
+template <typename M> inline bool
+Cond::timedWaitImpl(const M& mutex, const Time& timeout) const
+{
+  if(timeout < Time::microSeconds(0))
   {
-    if(timeout < Time::microSeconds(0))
-    {
     #ifdef _NO_EXCEPTION
       LOG(ERROR,"%s","InvalidTimeoutException");
       return false;
@@ -111,10 +106,6 @@ class Cond : private noncopyable
   timespec ts;
   ts.tv_sec = tv.tv_sec;
   ts.tv_nsec = tv.tv_usec * 1000;
-  /*timeval tv = Time::now(Time::Realtime);
-  timespec ts;
-  ts.tv_sec  = tv.tv_sec + timeout/1000;
-  ts.tv_nsec = tv.tv_usec * 1000 + ( timeout % 1000 ) * 1000000;*/
   const int rc = pthread_cond_timedwait(&_cond, state.mutex, &ts);
   mutex.lock(state);
 
@@ -126,7 +117,7 @@ class Cond : private noncopyable
       LOG(ERROR,"%s","ThreadSyscallException");
       return false;
     }
-#else
+  #else
     if(rc != ETIMEDOUT)
     {
       throw ThreadSyscallException(__FILE__, __LINE__, rc);
@@ -136,7 +127,7 @@ class Cond : private noncopyable
   return true;
 }
 
-}// namespace base
-}// namespace neptune
+} // namespace base
+} // namespace neptune
 
 #endif

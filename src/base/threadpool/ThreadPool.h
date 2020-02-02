@@ -6,10 +6,10 @@
 #include <vector>
 #include "base/common/Shared.h"
 #include "base/concurrent/Mutex.h"
-#include "base/concurrent/RecMutex.h"
+#include "base/concurrent/CountMutex.h"
 #include "base/concurrent/Cond.h"
 #include "base/common/Monitor.h"
-#include "base/thread/ThreadDetail.h"
+#include "base/thread/Thread.h"
 #include "base/common/EventHandler.h"
 
 #define DEFAUTL_STACK_SIZE 4*1024*1024   //16M

@@ -1,11 +1,11 @@
 ## What is `neptune`?
 Neptune is an experimental learning project.<br>
-Using C++ language to realize related functions of distributed system..
+Using C++ language to realize related functions of distributed system.
 
-## `base`
+## `src/base`
 It is a basic library of neptune.
 
-## `module`
+## `src/module`
 Various service components are integrated here.
 
 ## `module/dfs` 

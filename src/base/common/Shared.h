@@ -9,10 +9,8 @@ namespace base {
 class SimpleShared
 {
  public:
-
   SimpleShared();
   SimpleShared(const SimpleShared&);
-
   virtual ~SimpleShared()
   {
   }
@@ -52,7 +50,6 @@ class SimpleShared
   }
 
  private:
-
   int _ref;
   bool _noDelete;
 };

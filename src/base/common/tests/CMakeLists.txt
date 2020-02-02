@@ -1,9 +1,16 @@
-add_executable(atomictest AtomicTest.cpp)
+add_executable(
+  common_test
+  AtomicTest.cpp
+  CDefineTest.cpp
+  ConfigTest.cpp
+  $<TARGET_OBJECTS:obj_base>
+)
 
 target_link_libraries(
-    atomictest
-    gtest
-    pthread
+  common_test
+  gtest
+  gtest_main
+  pthread
 ) 
 
-install(TARGETS atomictest DESTINATION tests/common)
+install(TARGETS common_test DESTINATION tests/base)

@@ -4,13 +4,13 @@
 namespace neptune {
 namespace base {
 
+class CThread;
 class Runnable {
 
  public:
-
   virtual ~Runnable() {}
-  
   virtual void run(CThread *thread, void *arg) = 0;
+  
 };
 
 } //namespace base

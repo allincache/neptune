@@ -1,22 +1,23 @@
-#ifndef NEP_BASE_CONCURRENT_MUTEX_H
-#define NEP_BASE_CONCURRENT_MUTEX_H 
+#ifndef NEP_BASE_CONCURRENT_CountMutex_H
+#define NEP_BASE_CONCURRENT_CountMutex_H
 
-#include <pthread.h>
 #include "Lock.h"
-#include "base/include/Base.h"
 #include "base/thread/ThreadException.h"
 
 namespace neptune {
 namespace base {
 
-class Mutex : noncopyable 
-{
- public:
-  typedef LockT<Mutex> Lock;
-  typedef TryLockT<Mutex> TryLock;
+class Cond;
 
-  Mutex();
-  ~Mutex();
+class CountMutex : noncopyable
+{
+
+ public:
+  typedef LockT<CountMutex> Lock;
+  typedef TryLockT<CountMutex> TryLock;
+
+  CountMutex();
+  ~CountMutex();
 
   void lock() const;
   bool tryLock() const;
@@ -27,15 +28,18 @@ class Mutex : noncopyable
   struct LockState
   {
     pthread_mutex_t* mutex;
+    int count;
   };
 
   void unlock(LockState&) const;
   void lock(LockState&) const;
-  mutable pthread_mutex_t _mutex;
+
   friend class Cond;
+  mutable pthread_mutex_t _mutex;
+  mutable int _count;
 };
 
 } //namespace base
 } //namespace neptune
 
-#endif //NEP_BASE_CONCURRENT_MUTEX_H
+#endif //NEP_BASE_CONCURRENT_CountMutex_H

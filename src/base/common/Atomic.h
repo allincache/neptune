@@ -13,9 +13,11 @@
  * on us. We need to use _exactly_ the address the user gave us,
  * not some alias that contains the same information.
  */
-typedef struct { volatile int counter; } atomic_t;
+typedef struct {
+	volatile int counter;
+} atomic_t;
 
-#define ATOMIC_INIT(i)	{ (i) }
+#define ATOMIC_INIT(i) { (i) }
 
 /**
  * atomic_read - read atomic variable
@@ -23,7 +25,7 @@ typedef struct { volatile int counter; } atomic_t;
  * 
  * Atomically reads the value of v.
  */ 
-#define atomic_read(v)		((v)->counter)
+#define atomic_read(v) ((v)->counter)
 
 /**
  * atomic_set - set atomic variable
@@ -32,7 +34,7 @@ typedef struct { volatile int counter; } atomic_t;
  * 
  * Atomically sets the value of v to i.
  */ 
-#define atomic_set(v,i)		(((v)->counter) = (i))
+#define atomic_set(v,i) (((v)->counter) = (i))
 
 /**
  * atomic_add - add integer to atomic variable

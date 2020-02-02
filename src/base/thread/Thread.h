@@ -1,70 +1,47 @@
-#ifndef NEP_BASE_THREAD_T_H
-#define NEP_BASE_THREAD_T_H
+#ifndef N_BASE_COMMON_THREAD_H
+#define N_BASE_COMMON_THREAD_H
 
-#include <linux/unistd.h>
+#include "base/common/Shared.h"
+#include "base/common/Handle.h"
+#include "base/concurrent/Mutex.h"
+#include "base/concurrent/Cond.h"
+#include "base/time/Time.h"
 
 namespace neptune {
 namespace base {
 
-class CThread {
+class Thread : virtual public Shared, noncopyable
+{
 
  public:
-  CThread() {
-    tid = 0;
-    pid = 0;
-  }
+  Thread();
+  virtual ~Thread();
+  virtual void run() = 0;
+  int  start(size_t stackSize= 0);
+  bool isAlive() const; 
+  void _done(); 
+  int join();  
+  int detach();
+  pthread_t id() const;
+  static void yield();
+  static void ssleep(const Time& timeout);
 
-  bool start(Runnable *r, void *a) {
-    runnable = r;
-    args = a;
-    return 0 == pthread_create(&tid, NULL, CThread::hook, this);
-  }
+ protected:
+  bool  _running;   
+  bool _started;    
+  bool _detachable;
+  pthread_t _thread;
+  Mutex _mutex;
 
-  void join() {
-    if (tid) {
-      pthread_join(tid, NULL);
-      tid = 0;
-      pid = 0;
-    }
-  }
-
-  Runnable *getRunnable() {
-    return runnable;
-  }
-
-  void *getArgs() {
-    return args;
-  }
-
-  int getpid() {
-    return pid;
-  }
-
-  static void *hook(void *arg) {
-    CThread *thread = (CThread*) arg;
-    thread->pid = gettid();
-
-    if (thread->getRunnable()) {
-      thread->getRunnable()->run(thread, thread->getArgs());
-    }
-
-    return (void*) NULL;
-  }
-
- private:    
-  #ifdef _syscall0
-  static _syscall0(pid_t,gettid)
-  #else
-  static pid_t gettid() { return static_cast<pid_t>(syscall(__NR_gettid));}
-  #endif
-
-  pthread_t tid;      // pthread_self() id
-  int pid;            
-  Runnable *runnable;
-  void *args;
+//  private:
+//   Thread(const Thread&);            
+//   Thread& operator=(const Thread&);   
 };
+
+typedef Handle<Thread> ThreadPtr;
 
 } //namespace base
 } //namespace neptune
 
-#endif //NEP_BASE_THREAD_T_H
+#endif //N_BASE_COMMON_THREAD_H
+
