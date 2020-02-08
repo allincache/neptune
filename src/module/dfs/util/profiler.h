@@ -19,22 +19,24 @@
 #define PROFILER_SET_THRESHOLD(sh) util::Profiler::m_profiler.threshold = (sh)
 #define PROFILER_SET_STATUS(st) util::Profiler::m_profiler.status = (st)
 
+using namespace neptune::base;
+
 namespace neptune {
 namespace dfs {
 
-template<class T>
-class ThreadLocal {
- public:
-	ThreadLocal () {
-	    pthread_key_create(&key, NULL);
-	}
-	virtual ~ThreadLocal () {}
-	T get() { return (T)pthread_getspecific(key); }
-	void set(T data) { pthread_setspecific(key, (void *)data); }
+// template<class T>
+// class ThreadLocal {
+//  public:
+// 	ThreadLocal () {
+// 	    pthread_key_create(&key, NULL);
+// 	}
+// 	virtual ~ThreadLocal () {}
+// 	T get() { return (T)pthread_getspecific(key); }
+// 	void set(T data) { pthread_setspecific(key, (void *)data); }
 
- private:
-	pthread_key_t key;
-};
+//  private:
+// 	pthread_key_t key;
+// };
 
 class Entry
 {
@@ -187,19 +189,12 @@ class Profiler
 	Profiler();
 
 	void start(const std::string& description);
-
 	void stop();
-
 	void reset();
-
 	void begin(const std::string& description);
-
 	void end();
-
 	long getDuration();
-
 	Entry *getCurrentEntry();
-
 	void dump();
  
  private:

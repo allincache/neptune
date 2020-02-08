@@ -24,6 +24,7 @@ add_library(
 #add_subdirectory(common)
 #add_subdirectory(concurrent)
 add_subdirectory(thread)
+add_subdirectory(log)
 
 install(TARGETS base DESTINATION lib)
 

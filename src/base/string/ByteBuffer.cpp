@@ -111,7 +111,7 @@ void ByteBuffer::reset(uint32_t size)
   free();
   size_ = size;
   if (size_ > 0)  {
-      data_ = allocate(size_);
+    data_ = allocate(size_);
   }
 }
 

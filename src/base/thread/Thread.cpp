@@ -165,7 +165,7 @@ int Thread::join()
   if(_detachable)
   {
 #ifdef _NO_EXCEPTION
-    LOG(ERROR,"%s","BadThreadControlException");
+    LOG(ERROR, "%s", "BadThreadControlException");
     JUST_RETURN( _detachable==true , -1);
 #else
       throw BadThreadControlException(__FILE__, __LINE__);
@@ -176,7 +176,7 @@ int Thread::join()
 #ifdef _NO_EXCEPTION
   if ( 0 != rt )
   {
-    LOG(ERROR,"%s","ThreadSyscallException");
+    LOG(ERROR, "%s", "ThreadSyscallException");
     return -1;
   }
 #else
@@ -193,7 +193,7 @@ int Thread::detach()
   if(!_detachable)
   {
 #ifdef _NO_EXCEPTION
-    LOG(ERROR,"%s","BadThreadControlException");
+    LOG(ERROR, "%s", "BadThreadControlException");
     JUST_RETURN( _detachable==false, -1 );
 #else
     throw BadThreadControlException(__FILE__, __LINE__);
@@ -204,7 +204,7 @@ int Thread::detach()
 #ifdef _NO_EXCEPTION
   if ( 0 != rt )
   {
-    LOG(ERROR,"%s","ThreadSyscallException");
+    LOG(ERROR, "%s", "ThreadSyscallException");
     return -1;
   }
 #else

@@ -30,8 +30,9 @@
 #define LOG(level, _fmt_, args...) ((LOG_LEVEL_##level>LOGGER._level) ? (void)0 : LOG_BASE(level,_fmt_, ##args))
 #define LOG_US(level, _fmt_, args...) \
   ((LOG_LEVEL_##level>LOGGER._level) ? (void)0 : LOG_BASE(level, "[%ld][%ld][%ld] " _fmt_, \
-                                                            pthread_self(), CLogger::get_cur_tv().tv_sec, \
-                                                            CLogger::get_cur_tv().tv_usec, ##args))
+  pthread_self(), CLogger::get_cur_tv().tv_sec, \
+  CLogger::get_cur_tv().tv_usec, ##args))
+
 namespace neptune {
 namespace base {
 
@@ -47,18 +48,13 @@ class CLogger {
   ~CLogger();
 
   void rotateLog(const char *filename, const char *fmt = NULL);
-  
   void logMessage(int level, const char *file, int line, const char *function, pthread_t tid, const char *fmt, ...) __attribute__ ((format (printf, 7, 8)));
-  
   void setLogLevel(const char *level, const char *wf_level = NULL);
-
   void setFileName(const char *filename, bool flag = false, bool open_wf = false);
-  
   void checkFile();
   void setCheck(int v) {_check = v;}
   
   void setMaxFileSize( int64_t maxFileSize=0x40000000);
-  
   void setMaxFileIndex( int maxFileIndex= 0x0F);
 
   static inline struct timeval get_cur_tv()

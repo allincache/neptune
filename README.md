@@ -6,7 +6,7 @@ Using C++ language to realize related functions of distributed system.
 It is a basic library of neptune.
 
 ## `src/module`
-Various service components are integrated here.
+Various service components are integrated in this section,such as 'module/dfs'.
 
 ## `module/dfs` 
 #### Depend on gtest

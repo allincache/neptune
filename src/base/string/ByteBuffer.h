@@ -9,12 +9,11 @@ namespace base {
 class ByteBuffer
 {
  public:
-  class out_of_range : public std::exception
+  class out_of_range: public std::exception
   {
     public:
       out_of_range(uint32_t p, uint32_t l, uint32_t s);
       virtual ~out_of_range() throw() {}
-
       virtual const char* what() ;//const ;//throw() ;
 
     private:

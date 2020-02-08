@@ -59,6 +59,7 @@ namespace base {
   class CDefaultRunnable;
   class QueueHandler;
   class CQueueThread;
+//  class ThreadLocal;
   class Exception;
   // class PacketHeader;
   // class DataBuffer;
@@ -98,19 +99,12 @@ typedef float Float;
 typedef double Double;
  
 typedef ::std::vector<bool> BoolSeq;
- 
 typedef ::std::vector< Byte> ByteSeq;
- 
 typedef ::std::vector< Short> ShortSeq;
- 
 typedef ::std::vector< Int> IntSeq;
- 
 typedef ::std::vector< Long> LongSeq;
- 
 typedef ::std::vector< Float> FloatSeq;
- 
 typedef ::std::vector< Double> DoubleSeq;
- 
 typedef ::std::vector< ::std::string> StringSeq;
  
 inline int getSystemErrno()
@@ -128,15 +122,16 @@ inline int getSystemErrno()
 #include "base/time/TimeUtil.h"
 #include "base/common/Atomic.h"
 #include "base/concurrent/RwLock.h"
-#include "base/common/Runnable.h"
-#include "base/common/QueueHandler.h"
-#include "base/common/DefaultRunnable.h"
+#include "base/thread/Runnable.h"
+#include "base/thread/QueueHandler.h"
+#include "base/thread/DefaultRunnable.h"
 #include "base/process/Process.h"
 #include "base/log/Log.h"
 #include "base/thread/CThread.h"
 #include "base/thread/CThreadMutex.h"
 #include "base/thread/CThreadCond.h"
-#include "base/common/QueueThread.h"
+#include "base/thread/QueueThread.h"
+#include "base/thread/ThreadLocal.h"
 #include "base/common/Exception.h"
 #include "base/common/Serialization.h"
 // #include "base/network/simple/packet.h"
