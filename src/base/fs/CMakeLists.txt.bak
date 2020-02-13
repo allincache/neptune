@@ -1,5 +1,0 @@
-aux_source_directory(. SRC_LIST)
-add_library(
-  base_fs_obj OBJECT
-  ${SRC_LIST}
-)
