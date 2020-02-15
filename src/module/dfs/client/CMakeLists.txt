@@ -5,7 +5,7 @@ list(REMOVE_ITEM SRC_LIST "./tair_unique_handler.cpp")
 add_library(client ${SRC_LIST})
 target_link_libraries(
     client
-    libbase 
+    base 
     util  
     message 
     pthread

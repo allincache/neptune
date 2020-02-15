@@ -8,7 +8,7 @@ add_executable(dataserver service.cpp $<TARGET_OBJECTS:obj_dataserver>)
 
 target_link_libraries(
   dataserver
-  libbase 
+  base 
   util
   message
   client

@@ -12,7 +12,7 @@ add_executable(
 
 target_link_libraries(
     clear_file_system
-    libbase 
+    base 
     util
     message
     client
@@ -21,7 +21,7 @@ target_link_libraries(
 
 target_link_libraries(
     format_file_system
-    libbase 
+    base 
     util
     message
     client

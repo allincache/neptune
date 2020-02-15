@@ -12,6 +12,7 @@ foreach (TMP_PATH ${BASE_SRC_FILES})
   endif ()
 endforeach(TMP_PATH)
 
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 add_library(
    base STATIC ${BASE_SRC_FILES}
@@ -21,12 +22,12 @@ add_library(
    obj_base OBJECT ${BASE_SRC_FILES}
 )
 
-#add_subdirectory(common)
-#add_subdirectory(concurrent)
+# add_subdirectory(common)
+# add_subdirectory(concurrent)
 add_subdirectory(thread)
 add_subdirectory(log)
 
 install(TARGETS base DESTINATION lib)
 
-#file(GLOB HEADERS ${BASE_HOME}/"*.h")
-#install(FILES ${HEADERS} DESTINATION include)
+# file(GLOB HEADERS ${BASE_HOME}/"*.h")
+# install(FILES ${HEADERS} DESTINATION include)

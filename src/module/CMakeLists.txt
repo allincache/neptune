@@ -9,12 +9,7 @@ SET(MODULE_DFS_CONF_DIR /opt/neptune/dfs/conf)
 include_directories(AFTER ./)
 include_directories(AFTER ../)
 
-#LINK_DIRECTORIES(${MODULE_DFS_DIR}/client)
-
-FIND_LIBRARY(BASE libbase.a ../../build/release/lib/)
-
-add_library(libbase STATIC IMPORTED)
-set_target_properties(libbase PROPERTIES IMPORTED_LOCATION ${BASE})
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 add_subdirectory (dfs)
 
