@@ -17,9 +17,9 @@ namespace base {
 class CProcess {
 
  public:
-  static int startDaemon(const char *szPidFile, const char *szLogFile);
-  static int existPid(const char *szPidFile);
-  static void writePidFile(const char *szPidFile);
+  static int startDaemon(const string& pidFile, const string& logFile);
+  static int existPid(const string& pidFile);
+  static void writePidFile(const string& pidFile);
   
 };
 

@@ -3,7 +3,7 @@
 namespace neptune {
 namespace base {
     
-int CProcess::startDaemon(const char *szPidFile, const char *szLogFile)
+int CProcess::startDaemon(const string& pidFile, const string& logFile)
 {
   if (getppid() == 1) {
     return 0;
@@ -13,7 +13,7 @@ int CProcess::startDaemon(const char *szPidFile, const char *szLogFile)
   if (pid < 0) exit(1);
   if (pid > 0) return pid;
 
-  writePidFile(szPidFile);
+  writePidFile(pidFile.c_str());
 
   int fd =open("/dev/null", 0);
   if (fd != -1) {
@@ -21,46 +21,46 @@ int CProcess::startDaemon(const char *szPidFile, const char *szLogFile)
     close(fd);
   }
   
-  LOGGER.setFileName(szLogFile);
+  LOGGER.setFileName(logFile.c_str());
           
   return pid;
 }
 
-void CProcess::writePidFile(const char *szPidFile)
+void CProcess::writePidFile(const string& pidFile)
 {
-  char            str[32];
-  int lfp = open(szPidFile, O_WRONLY|O_CREAT|O_TRUNC, 0600);
-  if (lfp < 0) exit(1);
-  if (lockf(lfp, F_TLOCK, 0) < 0) {
-    fprintf(stderr, "Can't Open Pid File: %s", szPidFile);
+  char buf[32];
+  int fp = ::open(pidFile.c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0600);
+  if (fp < 0) exit(1);
+  if (lockf(fp, F_TLOCK, 0) < 0) {
+    fprintf(stderr, "Can't Open Pid File: %s", pidFile.c_str());
     exit(0);
   }
-  sprintf(str, "%d\n", getpid());
-  ssize_t len = strlen(str);
-  ssize_t ret = write(lfp, str, len);
+  sprintf(buf, "%d\n", getpid());
+  ssize_t len = strlen(buf);
+  ssize_t ret = ::write(fp, buf, len);
   if (ret != len ) {
-    fprintf(stderr, "Can't Write Pid File: %s", szPidFile);
+    fprintf(stderr, "Can't Write Pid File: %s", pidFile.c_str());
     exit(0);
   }
-  close(lfp);
+  close(fp);
 }
     
-int CProcess::existPid(const char *szPidFile)
+int CProcess::existPid(const string& pidFile)
 {
-  char buffer[64], *p;
-  int otherpid = 0, lfp;
-  lfp = open(szPidFile, O_RDONLY, 0);
-  if (lfp >= 0) {
-    read(lfp, buffer, 64);
-    close(lfp);
-    buffer[63] = '\0';
-    p = strchr(buffer, '\n');
+  char buf[64], *p;
+  int otherpid = 0, fp;
+  fp = ::open(pidFile.c_str(), O_RDONLY, 0);
+  if (fp >= 0) {
+    ::read(fp, buf, 64);
+    ::close(fp);
+    buf[63] = '\0';
+    p = strchr(buf, '\n');
     if (p != NULL)
       *p = '\0';
-    otherpid = atoi(buffer);
+    otherpid = atoi(buf);
   }
   if (otherpid > 0) {
-    if (kill(otherpid, 0) != 0) {
+    if (::kill(otherpid, 0) != 0) {
       otherpid = 0;
     }
   }
