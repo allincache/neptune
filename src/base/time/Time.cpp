@@ -6,6 +6,8 @@
 namespace neptune {
 namespace base {
 
+using namespace std;
+
 Time::Time() :
   _usec(0)
 {
@@ -43,17 +45,17 @@ Time Time::now(Clock clock)
   }
 }
 
-Time Time::seconds(Int64 t)
+Time Time::seconds(int64_t t)
 {
   return Time(t * T_INT64(1000000));
 }
 
-Time Time::milliSeconds(Int64 t)
+Time Time::milliSeconds(int64_t t)
 {
   return Time(t * T_INT64(1000));
 }
 
-Time Time::microSeconds(Int64 t)
+Time Time::microSeconds(int64_t t)
 {
   return Time(t);
 }
@@ -66,17 +68,17 @@ Time::operator timeval() const
   return tv;
 }
 
-Int64 Time::toSeconds() const
+int64_t Time::toSeconds() const
 {
   return _usec / 1000000;
 }
 
-Int64 Time::toMilliSeconds() const
+int64_t Time::toMilliSeconds() const
 {
   return _usec / 1000;
 }
 
-Int64 Time::toMicroSeconds() const
+int64_t Time::toMicroSeconds() const
 {
   return _usec;
 }
@@ -96,7 +98,7 @@ double Time::toMicroSecondsDouble() const
   return static_cast<double>(_usec);
 }
 
-std::string Time::toDateTime() const
+string Time::toDateTime() const
 {
   time_t time = static_cast<long>(_usec / 1000000);
 
@@ -109,7 +111,7 @@ std::string Time::toDateTime() const
   strftime(buf, sizeof(buf), "%F %H:%M:%S", t);
   //strftime(buf, sizeof(buf), "%x %H:%M:%S", t);
 
-  std::ostringstream os;
+  ostringstream os;
   os << buf << ".";
   os.fill('0');
   os.width(3);
@@ -117,31 +119,29 @@ std::string Time::toDateTime() const
   return os.str();
 }
 
-std::string Time::toDuration() const
+string Time::toDuration() const
 {
-  Int64 usecs = _usec % 1000000;
-  Int64 secs = _usec / 1000000 % 60;
-  Int64 mins = _usec / 1000000 / 60 % 60;
-  Int64 hours = _usec / 1000000 / 60 / 60 % 24;
-  Int64 days = _usec / 1000000 / 60 / 60 / 24;
-
-  using namespace std;
+  int64_t usecs = _usec % 1000000;
+  int64_t secs = _usec / 1000000 % 60;
+  int64_t mins = _usec / 1000000 / 60 % 60;
+  int64_t hours = _usec / 1000000 / 60 / 60 % 24;
+  int64_t days = _usec / 1000000 / 60 / 60 / 24;
 
   ostringstream os;
   if(days != 0)
   {
-      os << days << "d ";
+    os << days << "d ";
   }
   os << setfill('0') << setw(2) << hours << ":" << setw(2) << mins << ":" << setw(2) << secs;
   if(usecs != 0)
   {
-      os << "." << setw(3) << (usecs / 1000);
+    os << "." << setw(3) << (usecs / 1000);
   }
 
   return os.str();
 }
 
-Time::Time(Int64 usec) :
+Time::Time(int64_t usec) :
   _usec(usec)
 {
 }

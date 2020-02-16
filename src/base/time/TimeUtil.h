@@ -12,10 +12,10 @@ namespace base {
 
 class CTimeUtil {
  public:
-    static int64_t getTime();
-    static int64_t getMonotonicTime();
-    static char *timeToStr(time_t t, char *dest);
-    static int strToTime(char *str);
+  static int64_t getTime();
+  static int64_t getMonotonicTime();
+  static char *timeToStr(time_t t, char *dest);
+  static int strToTime(char *str);
 };
 
 } //namespace base

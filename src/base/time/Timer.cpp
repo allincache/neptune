@@ -1,10 +1,10 @@
 #include "Timer.h"
 #include "base/common/Exception.h"
 
-using namespace std;
-
 namespace neptune {
 namespace base {
+
+using namespace std;
 
 Timer::Timer() :
   Thread(),
@@ -39,7 +39,7 @@ int Timer::schedule(const TimerTaskPtr& task, const Time& delay)
   if(_destroyed)
   {
 #ifdef _NO_EXCEPTION
-    LOG(ERROR,"%s","timer destroyed...");       
+    LOG(ERROR, "%s", "timer destroyed...");       
     return -1; 
 #else
     throw IllegalArgumentException(__FILE__, __LINE__, "timer destroyed");
@@ -51,7 +51,7 @@ int Timer::schedule(const TimerTaskPtr& task, const Time& delay)
   if(!inserted)
   {
 #ifdef _NO_EXCEPTION
-    LOG(ERROR,"%s","task is already schedulded...");       
+    LOG(ERROR, "%s", "task is already schedulded...");       
     return -1; 
 #else
     throw IllegalArgumentException(__FILE__, __LINE__, "task is already schedulded");
@@ -72,7 +72,7 @@ int Timer::scheduleRepeated(const TimerTaskPtr& task, const Time& delay)
   if(_destroyed)
   {
 #ifdef _NO_EXCEPTION
-      LOG(ERROR,"%s","timer destroyed...");
+      LOG(ERROR, "%s", "timer destroyed...");
       return -1;
 #else
       throw IllegalArgumentException(__FILE__, __LINE__, "timer destroyed");
@@ -84,7 +84,7 @@ int Timer::scheduleRepeated(const TimerTaskPtr& task, const Time& delay)
   if(!inserted)
   {
 #ifdef _NO_EXCEPTION
-      LOG(ERROR,"%s","task is already schedulded...");
+      LOG(ERROR, "%s", "task is already schedulded...");
       return -1;
 #else
       throw IllegalArgumentException(__FILE__, __LINE__, "task is already schedulded");
@@ -119,81 +119,79 @@ bool Timer::cancel(const TimerTaskPtr& task)
   return true;
 }
 
-void
-Timer::run()
+void Timer::run()
 {
   Token token(Time(), Time(), 0);
   while(true)
   {
+    {
+      Monitor<Mutex>::Lock sync(_monitor);
+
+      if(!_destroyed)
       {
-          Monitor<Mutex>::Lock sync(_monitor);
+        if(token.delay != Time())
+        {
+          map<TimerTaskPtr, Time, TimerTaskCompare>::iterator p = _tasks.find(token.task);
+          if(p != _tasks.end())
+          {
+            token.scheduledTime = Time::now(Time::Monotonic) + token.delay;
+            p->second = token.scheduledTime;
+            _tokens.insert(token);
+          }
+        }
+        token = Token(Time(), Time(), 0);
 
-          if(!_destroyed)
-          {
-              if(token.delay != Time())
-              {
-                  map<TimerTaskPtr, Time, TimerTaskCompare>::iterator p = _tasks.find(token.task);
-                  if(p != _tasks.end())
-                  {
-                      token.scheduledTime = Time::now(Time::Monotonic) + token.delay;
-                      p->second = token.scheduledTime;
-                      _tokens.insert(token);
-                  }
-              }
-              token = Token(Time(), Time(), 0);
-
-              if(_tokens.empty())
-              {
-                  _wakeUpTime = Time();
-                  _monitor.wait();
-              }
-          }
-          
-          if(_destroyed)
-          {
-              break;
-          }
-          
-          while(!_tokens.empty() && !_destroyed)
-          {
-              const Time now = Time::now(Time::Monotonic);
-              const Token& first = *(_tokens.begin());
-              if(first.scheduledTime <= now)
-              {
-                  token = first;
-                  _tokens.erase(_tokens.begin());
-                  if(token.delay == Time())
-                  {
-                      _tasks.erase(token.task);
-                  }
-                  break;
-              }
-              
-              _wakeUpTime = first.scheduledTime;
-              _monitor.timedWait(first.scheduledTime - now);
-          }
-
-          if(_destroyed)
-          {
-              break;
-          }
-      }     
-
-      if(token.task)
-      {
-          try
-          {
-              token.task->runTimerTask();
-          }
-          catch(const std::exception& e)
-          {
-              cerr << "Timer::run(): uncaught exception:\n" << e.what() << endl;
-          } 
-          catch(...)
-          {
-              cerr << "Timer::run(): uncaught exception" << endl;
-          }
+        if(_tokens.empty())
+        {
+          _wakeUpTime = Time();
+          _monitor.wait();
+        }
       }
+          
+      if(_destroyed)
+      {
+          break;
+      }
+      
+      while(!_tokens.empty() && !_destroyed)
+      {
+        const Time now = Time::now(Time::Monotonic);
+        const Token& first = *(_tokens.begin());
+        if(first.scheduledTime <= now)
+        {
+          token = first;
+          _tokens.erase(_tokens.begin());
+          if(token.delay == Time())
+          {
+            _tasks.erase(token.task);
+          }
+          break;
+        }
+        _wakeUpTime = first.scheduledTime;
+        _monitor.timedWait(first.scheduledTime - now);
+      }
+
+      if(_destroyed)
+      {
+        break;
+      }
+    }     
+
+    if(token.task)
+    {
+      try
+      {
+        token.task->runTimerTask();
+      }
+      catch(const exception& e)
+      {
+        cerr << "Timer::run(): uncaught exception:\n" << e.what() << endl;
+      } 
+      catch(...)
+      {
+        cerr << "Timer::run(): uncaught exception" << endl;
+      }
+    }
   }
 }
 

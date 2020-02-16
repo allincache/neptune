@@ -11,10 +11,10 @@ set(CXX_FLAGS
 string(REPLACE ";" " " CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
 add_subdirectory (base)
-# add_subdirectory (module)
+add_subdirectory (module)
 
 set(NEPTUNE_SRC_HOME ${CMAKE_CURRENT_SOURCE_DIR})
 
 include_directories(AFTER ${NEPTUNE_SRC_HOME}/base)
-# include_directories(AFTER ${NEPTUNE_SRC_HOME}/module)
+include_directories(AFTER ${NEPTUNE_SRC_HOME}/module)
 

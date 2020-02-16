@@ -17,7 +17,6 @@ typedef Handle<Timer> TimerPtr;
 class TimerTask : virtual public Shared
 {
  public:
-
   virtual ~TimerTask() { }
   virtual void runTimerTask() = 0;
 };
@@ -27,7 +26,6 @@ typedef Handle<TimerTask> TimerTaskPtr;
 class Timer :public virtual Shared ,private virtual Thread
 {
  public:
-
     Timer();
     void destroy();
     int schedule(const TimerTaskPtr& task, const Time& delay);

@@ -29,8 +29,8 @@ char *CTimeUtil::timeToStr(time_t t, char *dest)
     return dest;
   }
   sprintf(dest, "%04d%02d%02d%02d%02d%02d",
-      r.tm_year+1900, r.tm_mon+1, r.tm_mday,
-      r.tm_hour, r.tm_min, r.tm_sec);
+    r.tm_year+1900, r.tm_mon+1, r.tm_mday,
+    r.tm_hour, r.tm_min, r.tm_sec);
   return dest;
 }
 

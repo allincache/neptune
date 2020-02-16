@@ -10,19 +10,18 @@ namespace base {
 class Time
 {
  public:
-
   Time();
 
   enum Clock { Realtime, Monotonic };
   static Time now(Clock clock= Realtime);
-  static Time seconds(Int64 usec);
-  static Time milliSeconds(Int64 milli);
-  static Time microSeconds(Int64 micro);
+  static Time seconds(int64_t usec);
+  static Time milliSeconds(int64_t milli);
+  static Time microSeconds(int64_t micro);
   operator timeval() const;
 
-  Int64 toSeconds() const;
-  Int64 toMilliSeconds() const;
-  Int64 toMicroSeconds() const;
+  int64_t toSeconds() const;
+  int64_t toMilliSeconds() const;
+  int64_t toMicroSeconds() const;
 
   double toSecondsDouble() const;
   double toMilliSecondsDouble() const;
@@ -38,144 +37,144 @@ class Time
 
   Time operator-(const Time& rhs) const
   {
-      return Time(_usec - rhs._usec);
+    return Time(_usec - rhs._usec);
   }
 
   Time operator+(const Time& rhs) const
   {
-      return Time(_usec + rhs._usec);
+    return Time(_usec + rhs._usec);
   }
 
   Time& operator+=(const Time& rhs)
   {
-      _usec += rhs._usec;
-      return *this;
+    _usec += rhs._usec;
+    return *this;
   }
 
   Time& operator-=(const Time& rhs)
   {
-      _usec -= rhs._usec;
-      return *this;
+    _usec -= rhs._usec;
+    return *this;
   }
 
   bool operator<(const Time& rhs) const
   {
-      return _usec < rhs._usec;
+    return _usec < rhs._usec;
   }
 
   bool operator<=(const Time& rhs) const
   {
-      return _usec <= rhs._usec;
+    return _usec <= rhs._usec;
   }
 
   bool operator>(const Time& rhs) const
   {
-      return _usec > rhs._usec;
+    return _usec > rhs._usec;
   }
 
   bool operator>=(const Time& rhs) const
   {
-      return _usec >= rhs._usec;
+    return _usec >= rhs._usec;
   }
 
   bool operator==(const Time& rhs) const
   {
-      return _usec == rhs._usec;
+    return _usec == rhs._usec;
   }
 
   bool operator!=(const Time& rhs) const
   {
-      return _usec != rhs._usec;
+    return _usec != rhs._usec;
   }
 
   double operator/(const Time& rhs) const
   {
-      return (double)_usec / (double)rhs._usec;
+    return (double)_usec / (double)rhs._usec;
   }
 
   Time& operator*=(int rhs)
   {
-      _usec *= rhs;
-      return *this;
+    _usec *= rhs;
+    return *this;
   }
 
   Time operator*(int rhs) const
   {
-      Time t;
-      t._usec = _usec * rhs;
-      return t;
+    Time t;
+    t._usec = _usec * rhs;
+    return t;
   }
 
   Time& operator/=(int rhs)
   {
-      _usec /= rhs;
-      return *this;
+    _usec /= rhs;
+    return *this;
   }
 
   Time operator/(int rhs) const
   {
-      Time t;
-      t._usec = _usec / rhs;
-      return t;
+    Time t;
+    t._usec = _usec / rhs;
+    return t;
   }
 
-  Time& operator*=(Int64 rhs)
+  Time& operator*=(int64_t rhs)
   {
-      _usec *= rhs;
-      return *this;
+    _usec *= rhs;
+    return *this;
   }
 
-  Time operator*(Int64 rhs) const
+  Time operator*(int64_t rhs) const
   {
-      Time t;
-      t._usec = _usec * rhs;
-      return t;
+    Time t;
+    t._usec = _usec * rhs;
+    return t;
   }
 
-  Time& operator/=(Int64 rhs)
+  Time& operator/=(int64_t rhs)
   {
-      _usec /= rhs;
-      return *this;
+    _usec /= rhs;
+    return *this;
   }
 
-  Time operator/(Int64 rhs) const
+  Time operator/(int64_t rhs) const
   {
-      Time t;
-      t._usec = _usec / rhs;
-      return t;
+    Time t;
+    t._usec = _usec / rhs;
+    return t;
   }
 
   Time& operator*=(double rhs)
   {
-      _usec = static_cast<Int64>(static_cast<double>(_usec) * rhs);
-      return *this;
+    _usec = static_cast<int64_t>(static_cast<double>(_usec) * rhs);
+    return *this;
   }
 
   Time operator*(double rhs) const
   {
-      Time t;
-      t._usec = static_cast<Int64>(static_cast<double>(_usec) * rhs);
-      return t;
+    Time t;
+    t._usec = static_cast<int64_t>(static_cast<double>(_usec) * rhs);
+    return t;
   }
 
   Time& operator/=(double rhs)
   {
-      _usec = static_cast<Int64>(static_cast<double>(_usec) / rhs);
-      return *this;
+    _usec = static_cast<int64_t>(static_cast<double>(_usec) / rhs);
+    return *this;
   }
 
   Time operator/(double rhs) const
   {
-      Time t;
-      t._usec = static_cast<Int64>(static_cast<double>(_usec) / rhs);
-      return t;
+    Time t;
+    t._usec = static_cast<int64_t>(static_cast<double>(_usec) / rhs);
+    return t;
   }
 
-  Time(Int64);
+  Time(int64_t);
 
  private:
 
-  Int64 _usec;
+  int64_t _usec;
 };
 
 } //namespace base
