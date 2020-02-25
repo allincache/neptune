@@ -172,7 +172,7 @@ SyscallException::SyscallException(const char* file, int line, int err ):
 {
 }
   
-const char* SyscallException::_name = "SyscallException";
+string SyscallException::_name = "SyscallException";
 
 string SyscallException::name() const
 {

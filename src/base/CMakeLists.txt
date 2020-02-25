@@ -23,11 +23,12 @@ add_library(
 )
 
 # add_subdirectory(common)
-# add_subdirectory(concurrent)
+add_subdirectory(concurrent)
 add_subdirectory(thread)
 add_subdirectory(log)
 
 install(TARGETS base DESTINATION lib)
+
 
 # file(GLOB HEADERS ${BASE_HOME}/"*.h")
 # install(FILES ${HEADERS} DESTINATION include)

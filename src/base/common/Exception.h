@@ -9,14 +9,16 @@
 namespace neptune {
 namespace base {
 
-class Exception : public std::exception
+using namespace std;
+
+class Exception : public exception
 {
  public:
   Exception();
   Exception(const char*, int);
   virtual ~Exception() throw();
-  virtual std::string name() const;
-  virtual void print(std::ostream&) const;
+  virtual string name() const;
+  virtual void print(ostream&) const;
   virtual const char* what() const throw();
   virtual Exception* clone() const;
   virtual void _throw() const;
@@ -28,10 +30,10 @@ class Exception : public std::exception
   const char* _file;
   int _line;
   static const char* _name;
-  mutable ::std::string _str; 
+  mutable string _str; 
 };
 
-std::ostream& operator << (std::ostream& out, const Exception& ex);
+ostream& operator << (ostream& out, const Exception& ex);
 
 class NullHandleException : public Exception
 {
@@ -39,7 +41,7 @@ class NullHandleException : public Exception
     
   NullHandleException(const char*, int);
   virtual ~NullHandleException() throw();
-  virtual std::string name() const;
+  virtual string name() const;
   virtual Exception* clone() const;
   virtual void _throw() const;
 
@@ -51,17 +53,17 @@ class IllegalArgumentException : public Exception
 {
  public:
   IllegalArgumentException(const char*, int);
-  IllegalArgumentException(const char*, int, const std::string&);
+  IllegalArgumentException(const char*, int, const string&);
   virtual ~IllegalArgumentException() throw();
-  virtual std::string name() const;
-  virtual void print(std::ostream&) const;
+  virtual string name() const;
+  virtual void print(ostream&) const;
   virtual Exception* clone() const;
   virtual void _throw() const;
-  std::string reason() const;
+  string reason() const;
 
  private:
   static const char* _name;
-  std::string _reason;
+  string _reason;
 };
 
 class SyscallException : public Exception
@@ -69,15 +71,15 @@ class SyscallException : public Exception
  public:
   SyscallException( const char* , int );
   SyscallException(const char*, int, int);
-  virtual std::string name() const;
-  virtual void print(std::ostream&) const;
+  virtual string name() const;
+  virtual void print(ostream&) const;
   virtual Exception* clone() const;
   virtual void _throw() const;
 
   int error() ;
 
   int _error;
-  static const char* _name;
+  static string _name;
 };
 
 } //namespace neptune

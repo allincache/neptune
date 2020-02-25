@@ -18,8 +18,8 @@ namespace base {
 #undef NEP_COMMON_CDEFINE_H_
 
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)      \
-    TypeName(const TypeName&);                  \
-    void operator=(const TypeName&)
+  TypeName(const TypeName&);                  \
+  void operator=(const TypeName&)
 
 } //namespace base
 } //namespace neptune

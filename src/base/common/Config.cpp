@@ -13,7 +13,9 @@ CConfig::CConfig()
 
 CConfig::~CConfig()
 {
-  for(STR_MAP_ITER it=m_configMap.begin(); it!=m_configMap.end(); ++it) {
+  for(auto it=m_configMap.begin(); 
+    it!=m_configMap.end(); 
+    ++it) {
     delete it->second;
   }
 }
@@ -89,7 +91,6 @@ int CConfig::load(const char *filename)
   int ret, line = 0;
   
   if ((fp = fopen(filename, "rb")) == NULL) {
-    //LOG(ERROR, "���ܴ������ļ�: %s", filename);
     return EXIT_FAILURE;
   }
   
@@ -98,7 +99,7 @@ int CConfig::load(const char *filename)
     line ++;
     char *sName = isSectionName(data);
     if (sName != NULL) {
-      STR_MAP_ITER it = m_configMap.find(sName);
+      auto it = m_configMap.find(sName);
       if (it == m_configMap.end()) {
         m = new STR_STR_MAP();
         m_configMap.insert(STR_MAP::value_type(/*CStringUtil::strToLower(sName)*/sName, m));
@@ -109,7 +110,6 @@ int CConfig::load(const char *filename)
     }
     ret = parseValue(data, key, value);
     if (ret == -2) {
-      //LOG(ERROR, "��������, Line: %d, %s", line, data);
       fclose(fp);
       return EXIT_FAILURE;
     }
@@ -117,7 +117,6 @@ int CConfig::load(const char *filename)
       continue;
     }
     if (m == NULL) {
-      //LOG(ERROR, "û������section, Line: %d, %s", line, data);
       fclose(fp);
       return EXIT_FAILURE;
     }            
@@ -136,11 +135,11 @@ int CConfig::load(const char *filename)
 
 const char *CConfig::getString(const char *section, const string& key, const char *d)
 {
-  STR_MAP_ITER it = m_configMap.find(section);
+  auto it = m_configMap.find(section);
   if (it == m_configMap.end()) {
     return d;
   }
-  STR_STR_MAP_ITER it1 = it->second->find(key);
+  auto it1 = it->second->find(key);
   if (it1 == it->second->end()) {
     return d;
   }
@@ -149,11 +148,11 @@ const char *CConfig::getString(const char *section, const string& key, const cha
 
 vector<const char*> CConfig::getStringList(const char *section, const string& key) {
   vector<const char*> ret;
-  STR_MAP_ITER it = m_configMap.find(section);
+  auto it = m_configMap.find(section);
   if (it == m_configMap.end()) {
     return ret;
   }
-  STR_STR_MAP_ITER it1 = it->second->find(key);
+  auto it1 = it->second->find(key);
   if (it1 == it->second->end()) {
     return ret;
   }
@@ -177,11 +176,11 @@ int CConfig::getInt(const char *section, const string& key, int d)
 
 vector<int> CConfig::getIntList(const char *section, const string& key) {
   vector<int> ret;
-  STR_MAP_ITER it = m_configMap.find(section);
+  auto it = m_configMap.find(section);
   if (it == m_configMap.end()) {
     return ret;
   }
-  STR_STR_MAP_ITER it1 = it->second->find(key);
+  auto it1 = it->second->find(key);
   if (it1 == it->second->end()) {
     return ret;
   }
@@ -199,12 +198,11 @@ vector<int> CConfig::getIntList(const char *section, const string& key) {
 
 int CConfig::getSectionKey(const char *section, vector<string> &keys)
 {
-  STR_MAP_ITER it = m_configMap.find(section);
+  auto it = m_configMap.find(section);
   if (it == m_configMap.end()) {
     return 0;
   }
-  STR_STR_MAP_ITER it1;
-  for(it1=it->second->begin(); it1!=it->second->end(); ++it1) {
+  for(auto it1=it->second->begin(); it1!=it->second->end(); ++it1) {
     keys.push_back(it1->first);
   }
   return (int)keys.size();
@@ -212,8 +210,7 @@ int CConfig::getSectionKey(const char *section, vector<string> &keys)
             
 int CConfig::getSectionName(vector<string> &sections)
 {
-  STR_MAP_ITER it;
-  for(it=m_configMap.begin(); it!=m_configMap.end(); ++it)
+  for(auto it=m_configMap.begin(); it!=m_configMap.end(); ++it)
   {
     sections.push_back(it->first);
   }
@@ -223,11 +220,9 @@ int CConfig::getSectionName(vector<string> &sections)
 string CConfig::toString()
 {
   string result;
-  STR_MAP_ITER it;
-  STR_STR_MAP_ITER it1;
-  for(it=m_configMap.begin(); it!=m_configMap.end(); ++it) {
+  for(auto it=m_configMap.begin(); it!=m_configMap.end(); ++it) {
     result += "[" + it->first + "]\n";
-    for(it1=it->second->begin(); it1!=it->second->end(); ++it1) {
+    for(auto it1=it->second->begin(); it1!=it->second->end(); ++it1) {
       string s = it1->second.c_str();
       result += "    " + it1->first + " = " + s + "\n";
       if (s.size() != it1->second.size()) {

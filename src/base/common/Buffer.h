@@ -11,10 +11,10 @@ class Buffer {
 
  public:
   Buffer()
-    : pstart_(NULL),
-      pend_(NULL),
-      pfree_(NULL),
-      pdata_(NULL)
+    : pstart_(nullptr),
+      pend_(nullptr),
+      pfree_(nullptr),
+      pdata_(nullptr)
   {
   }
 
@@ -25,10 +25,10 @@ class Buffer {
 
   inline void destroy()
   {
-    if (NULL != pstart_)
+    if (nullptr != pstart_)
     {
       free(pstart_);
-      pend_ = pfree_ = pdata_ = pstart_ = NULL;
+      pend_ = pfree_ = pdata_ = pstart_ = nullptr;
     }
   }
 
@@ -59,7 +59,7 @@ class Buffer {
 
   inline int drain(const int64_t length)
   {
-    int32_t iret = NULL != pdata_ ? SUCCESS : ERROR;
+    int32_t iret = nullptr != pdata_ ? SUCCESS : ERROR;
     if (SUCCESS == iret)
     {
       pdata_ += length;
@@ -74,7 +74,7 @@ class Buffer {
   inline int pour(const int64_t length)
   {
     assert(pend_ - pfree_ >= length);
-    int32_t iret = NULL != pfree_ ? SUCCESS : ERROR;
+    int32_t iret = nullptr != pfree_ ? SUCCESS : ERROR;
     if (SUCCESS == iret)
     {
       pfree_ += length;
@@ -85,7 +85,7 @@ class Buffer {
   inline int strip( const int64_t length)
   {
     assert(pfree_ - pdata_ >= length);
-    int32_t iret = NULL != pfree_ ? SUCCESS : ERROR;
+    int32_t iret = nullptr != pfree_ ? SUCCESS : ERROR;
     if (SUCCESS == iret)
     {
       pfree_ -= length;
@@ -100,7 +100,7 @@ class Buffer {
 
   inline void expand(const int64_t need)
   {
-    if (NULL == pstart_)
+    if (nullptr == pstart_)
     {
       int64_t length = DEFAULT_MALLOC_SIZE;
       while (length < need)
@@ -124,7 +124,7 @@ class Buffer {
         }
 
         unsigned char *newbuf = (unsigned char *)malloc(buf_size);
-        assert(newbuf != NULL);
+        assert(newbuf != nullptr);
         if (data_length > 0)
         {
           memcpy(newbuf, pdata_, data_length);
@@ -146,7 +146,7 @@ class Buffer {
  private:
   inline bool shrink()
   {
-    bool bret = NULL != pstart_;
+    bool bret = nullptr != pstart_;
     if (bret)
     {
       if ((pend_ - pstart_) <= SHRINK_BUFFER_SIZE || (pfree_ - pdata_) > SHRINK_BUFFER_SIZE)
@@ -160,7 +160,7 @@ class Buffer {
           old_length = 0;
 
         unsigned char *newbuf = (unsigned char*)malloc(SHRINK_BUFFER_SIZE);
-        assert(NULL != newbuf);
+        assert(nullptr != newbuf);
 
         if (old_length > 0)
         {

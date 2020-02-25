@@ -8,8 +8,9 @@
 namespace neptune {
 namespace base {
 
-FileOperation::FileOperation(const std::string& file_name, const int open_flags) :
-  fd_(-1), open_flags_(open_flags)
+FileOperation::FileOperation(const std::string& file_name, const int open_flags) 
+  : fd_(-1), 
+    open_flags_(open_flags)
 {
   file_name_ = strdup(file_name.c_str());
 }
